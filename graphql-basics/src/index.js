@@ -1,7 +1,5 @@
 import { GraphQLServer } from 'graphql-yoga';
 
-
-
 const users = [{
     id: '1',
     name: 'shubham',
@@ -39,6 +37,30 @@ const posts = [{
 },
 ]
 
+
+const comments = [
+    {
+        id: '1',
+        text: "yo bad story man !!!",
+        user: '1'
+    },
+    {
+        id: '2',
+        text: "yo good story man !!!",
+        user:'3'
+    },
+    {
+        id: '3',
+        text: "yo future story man !!!",
+        user:'1'
+    },
+    {
+        id: '4',
+        text: "yo bad story man !!!",
+        user: '3'
+    }
+]
+
 // typeDefs (Schema)
 const typeDefs = `
     type Query {
@@ -49,8 +71,10 @@ const typeDefs = `
 
        users(query: [String!]): [User!]!
        posts(query: [String!]): [Post!]!
+       comments(query: [String!]): [Comment!]!
        me: User!
        post: Post!
+       comment: Comment!
     }
 
     type User {
@@ -58,7 +82,8 @@ const typeDefs = `
         name: String!
         email: String!
         age: Int
-        posts: [Post!]! 
+        posts: [Post!]!
+        comments: [Comment!]!
     }
 
     type Post {
@@ -66,6 +91,12 @@ const typeDefs = `
         title: String!
         published: Boolean!
         author: User!
+    }
+
+    type Comment {
+        id: ID!
+        text: String!
+        user: User!
     }
 `;
 
@@ -107,9 +138,17 @@ const resolvers = {
         if(!args.query){
             return posts
          }
-         console.log('args',args)
 
          return posts.filter(val => val.title.toLowerCase().includes(args.query[0].toLowerCase()))
+       },
+
+       comments: (parent, args, ctx, info) => {
+           if(!args.query){
+               return comments;
+           }
+           
+           return comments.filter(comment => comment.text.toLowerCase().includes(args.query[0].toLowerCase()))
+
        },
 
        me() {
@@ -119,7 +158,9 @@ const resolvers = {
 
        post() {
            return {id: 'abc', title: "drama", published: false}
-       }
+       },
+
+       comment : () => ({id: 1, text:'im a comment'})
     },
 
     // relational data of posts of type Post with author
@@ -131,9 +172,16 @@ const resolvers = {
      }
     },
 
-  // relational data of users of type User with posts
+     // relational data of users of type User with posts
     User: {
-        posts: (parent, args, ctx, info) => posts.filter(post => post.author === parent.id)
+        posts: (parent, args, ctx, info) => posts.filter(post => post.author === parent.id),
+        comments: (parent, args, ctx, info) => comments.filter(comment => comment.id === parent.id),
+    },
+
+    // relational data of comments of type Comment with user
+
+    Comment: {
+        user: (parent, args, ctx, info) => users.find(user => user.id === parent.user)
     }
 
 };
