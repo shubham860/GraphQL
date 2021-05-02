@@ -21,19 +21,22 @@ const posts = [{
     id: '1',
     title: 'My story',
     published: true,
-    author: "1"
+    author: "1",
+    comment:"1"
 },
 {
     id: '2',
     title: 'My future',
     published: false,
-    author: '2'
+    author: '2',
+    comment: '2'
 },
 {   
     id: '3',
     title: 'My past',
     published: true,
-    author: '3'
+    author: '3',
+    comment: '3'
 },
 ]
 
@@ -91,6 +94,7 @@ const typeDefs = `
         title: String!
         published: Boolean!
         author: User!
+        comments: [Comment]!
     }
 
     type Comment {
@@ -169,6 +173,9 @@ const resolvers = {
          // here parent is the each object of post
          // (parent.id, parent.title, parent.published, parent.authod) we have access of all val in obj.
         return   users.find(val => val.id === parent.author)
+     },
+     comments: (parent, args, ctx, info) => {
+         return comments.filter(comment => parent.comment === comment.id)
      }
     },
 
