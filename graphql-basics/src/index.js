@@ -45,22 +45,26 @@ const comments = [
     {
         id: '1',
         text: "yo bad story man !!!",
-        user: '1'
+        user: '1',
+        post: '1'
     },
     {
         id: '2',
         text: "yo good story man !!!",
-        user:'3'
+        user:'3',
+        post:'3'
     },
     {
         id: '3',
         text: "yo future story man !!!",
-        user:'1'
+        user:'1',
+        post:'1'
     },
     {
         id: '4',
         text: "yo bad story man !!!",
-        user: '3'
+        user: '3',
+        post: '3'
     }
 ]
 
@@ -101,6 +105,7 @@ const typeDefs = `
         id: ID!
         text: String!
         user: User!
+        post: Post!
     }
 `;
 
@@ -188,7 +193,8 @@ const resolvers = {
     // relational data of comments of type Comment with user
 
     Comment: {
-        user: (parent, args, ctx, info) => users.find(user => user.id === parent.user)
+        user: (parent, args, ctx, info) => users.find(user => user.id === parent.user),
+        post: (parent, args, ctx, info) => posts.find(post => post.id === parent.post)
     }
 
 };
