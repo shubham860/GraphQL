@@ -1,0 +1,69 @@
+"""
+Schema
+type is used to define type of entity
+input is userd for defining arguments in query in form of object
+"""
+type Query {
+  add(a: Float, b: Float): Float!
+  addArray(numbers: [Float!]!): Float!
+  grade: [Int!]!
+  greeting(name: String): String!
+
+  users(query: [String!]): [User!]!
+  posts(query: [String!]): [Post!]!
+  comments(query: [String!]): [Comment!]!
+  me: User!
+  post: Post!
+  comment: Comment!
+}
+
+type Mutation {
+  createUser(data: userArguments): User!
+  createPost(data: postArguments): Post!
+  createComment(data: commentArguments): Comment!
+  deleteUser(id: ID!): User!
+  deletePost(id: ID!): Post!
+  deleteComment(id: ID!): Comment!
+}
+
+input userArguments {
+  name: String!
+  email: String!
+  age: Int
+}
+
+input postArguments {
+  title: String!
+  published: Boolean!
+  author: ID!
+}
+
+input commentArguments {
+  text: String!
+  user: ID!
+  post: ID!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  age: Int
+  posts: [Post!]!
+  comments: [Comment!]!
+}
+
+type Post {
+  id: ID!
+  title: String!
+  published: Boolean!
+  author: User!
+  comments: [Comment]!
+}
+
+type Comment {
+  id: ID!
+  text: String!
+  user: User!
+  post: Post!
+}
