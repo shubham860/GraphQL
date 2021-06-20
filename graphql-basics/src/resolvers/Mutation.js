@@ -99,6 +99,43 @@ exports.Mutation =  {
         db.posts = db.posts.filter(post => post.comment !== args.id)
 
         return deletedComment[0];
-    }
+    },
+
+    updateUser: (parent, args, ctx, info ) => {
+        const { db } = ctx;
+        const { id, data} = args;
+        
+        const User = db.users.find(user => user.id === id);
+
+        if(!User) throw new Error("User doesn't Exist");
+
+        return {...User, ...data };
+        
+    },
+
+    updateComment: (parent, args, ctx, info) => {
+        const { db } = ctx;
+        const { id, data} = args;
+        
+        const Comment = db.comments.find(comment => comment.id === id);
+
+        if(!Comment) throw new Error("Comment doesn't Exist");
+
+        return {...Comment, ...data };
+    },
+    
+    updatePost: (parent, args, ctx, info) => {
+        const { db } = ctx;
+        const { id, data} = args;
+        
+        const Post = db.posts.find(post => post.id === id);
+
+        if(!Post) throw new Error("Post doesn't Exist");
+
+        return {...Post, ...data };
+    },
+
+
+
 
 }
