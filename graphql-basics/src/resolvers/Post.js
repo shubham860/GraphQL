@@ -8,6 +8,7 @@ exports.Post =  {
     return   db.users.find(val => val.id === parent.author);
  },
  comments: (parent, args, ctx, info) => {
+    const {db} = ctx;
      return db.comments.filter(comment => parent.comment === comment.id);
  }
 }

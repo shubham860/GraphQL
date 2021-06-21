@@ -36,21 +36,22 @@ exports.Mutation =  {
 
 
     createComment: (parent, args, ctx, info) => {
-        const {db} = ctx;
+        const {db, pubSub} = ctx;
         const postExists = db.posts.some(post => (post.id === args.data.post) && post.published);
         const userExists = db.users.some(user =>  user.id === args.data.user); 
 
         if(!postExists) throw new Error("post doesn't exists or published");
         if(!userExists) throw new Error("user doesn't exists");
 
-        const comment = {
+        const Comment = {
             id: uuidv4(),
             ...args.data
         }
+        console.log("comment", Comment)
 
-        db.comments.push(comment);
-        return comment;
-    },
+        db.comments.push(Comment);
+        return Comment;
+    },      
 
     deleteUser: (parent, args, ctx, info) => {
         const {db} = ctx;

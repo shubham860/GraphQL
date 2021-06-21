@@ -24,18 +24,23 @@ type Mutation {
   deleteUser(id: ID!): User!
   deletePost(id: ID!): Post!
   deleteComment(id: ID!): Comment!
-  updateUser(id: ID!, data: userUpdateArguments ): User!
+  updateUser(id: ID!, data: userUpdateArguments): User!
   updatePost(id: ID!, data: postUpdateArguments): Post!
   updateComment(id: ID!, data: commentUpdateArguments): Comment!
 }
 
-input userUpdateArguments{
+type Subscription {
+  count: Int!
+  comment(post: ID!): Comment!
+}
+
+input userUpdateArguments {
   name: String
   email: String
   age: Int
 }
 
-input postUpdateArguments{
+input postUpdateArguments {
   title: String
   published: Boolean
   author: ID
@@ -46,7 +51,6 @@ input commentUpdateArguments {
   user: ID
   post: ID
 }
-
 
 input userArguments {
   name: String!
