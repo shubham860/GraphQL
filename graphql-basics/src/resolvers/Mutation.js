@@ -20,7 +20,7 @@ exports.Mutation =  {
     },
 
     createPost: (parent, args, ctx, info) => {
-        const {db} = ctx;
+        const {db, pubSub} = ctx;
         const userExists = db.users.some(user => user.id === args.data.author);
 
         if(!userExists) throw new Error("user doesn't exists");
@@ -29,6 +29,8 @@ exports.Mutation =  {
             id: uuidv4(),
             ...args.data
         }
+
+        pubSub.publish(`Post ${args.data.author}`, {Post})
 
         db.posts.push(Post);
         return Post;
@@ -47,9 +49,9 @@ exports.Mutation =  {
             id: uuidv4(),
             ...args.data
         }
-        console.log("comment", Comment)
 
         db.comments.push(Comment);
+        pubSub.publish(`Comment ${args.data.post}`, {Comment});
         return Comment;
     },      
 
@@ -77,7 +79,7 @@ exports.Mutation =  {
     },
 
     deletePost : (parent, args, ctx, info) => {
-        const {db} = ctx;
+        const { db, pubSub } = ctx;
         const postIndex = db.posts.findIndex(post => post.id === args.id);
 
         if(postIndex === -1) throw new Error("Post doesn't exist");

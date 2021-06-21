@@ -22,5 +22,15 @@ exports.Subscription = {
 
             return pubSub.asyncIterator(`Comment ${args.post}`);
         }
+    },
+
+    post : {
+        subscribe: (parent, args, ctx, info) => {
+             const { db, pubSub } = ctx;
+             const user = db.users.find(user => user.id === args.id);
+
+             if(!user) throw new Error("User doesn't exist");
+
+             return pubSub.asyncIterator(`post ${args.id}`);
     }
 }

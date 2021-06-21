@@ -32,6 +32,7 @@ type Mutation {
 type Subscription {
   count: Int!
   comment(post: ID!): Comment!
+  post(id: ID!): Post!
 }
 
 input userUpdateArguments {
